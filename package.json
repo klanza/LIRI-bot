@@ -1,0 +1,32 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "Text based version of interface programs like Google Home, SIRI, or Amazon Alexa",
+  "main": "liri.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klanza/LIRI-bot.git"
+  },
+  "author": "Kenneth Lanza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klanza/LIRI-bot/issues"
+  },
+  "homepage": "https://github.com/klanza/LIRI-bot#readme",
+  "dependencies": {
+    "eslint": "^4.15.0",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.83.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
