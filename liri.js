@@ -25,13 +25,14 @@ if (command === 'my-tweets') {
         // console.log('===========')
         console.log(element.created_at)
         console.log(element.text)
-        console.log('===========')
+        console.log('===================================================')
       })
     }
   })
 }
 
 if (command === 'spotify-this-song' && userQuery === undefined) {
+  console.log('---------------------------------------------------')
   console.log('Please include the song name, in quotations, after the Spotify command to use this function.')
   console.log('Here is an example response:')
   spotifyUser
@@ -67,6 +68,9 @@ if (command === 'movie-this' && userQuery === undefined) {
   request('http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=40e9cece', function (error, response, body) {
     // If the request is successful (i.e. if the response status code is 200)
     if (!error && response.statusCode === 200) {
+      console.log('---------------------------------------------------')
+      console.log('Please include the movie title, in quotations, after the Spotify command to use this function.')
+      console.log('Here is an example response:')
       console.log('===================================================')
       console.log('Title: ' + JSON.parse(body).Title)
       console.log('Year: ' + JSON.parse(body).Year)
