@@ -63,8 +63,40 @@ if (command === 'spotify-this-song' && typeof (userQuery) === 'string') {
   })
 }
 
-if (command === 'movie-this') {
+if (command === 'movie-this' && userQuery === undefined) {
+  request('http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=40e9cece', function (error, response, body) {
+    // If the request is successful (i.e. if the response status code is 200)
+    if (!error && response.statusCode === 200) {
+      console.log('===================================================')
+      console.log('Title: ' + JSON.parse(body).Title)
+      console.log('Year: ' + JSON.parse(body).Year)
+      console.log('IMDB rating: ' + JSON.parse(body).Ratings[0].Value)
+      console.log('Rotten Tomatoes rating: ' + JSON.parse(body).Ratings[1].Value)
+      console.log('Production country: ' + JSON.parse(body).Country)
+      console.log('Language: ' + JSON.parse(body).Title)
+      console.log('Plot: ' + JSON.parse(body).Plot)
+      console.log('Actors: ' + JSON.parse(body).Actors)
+      console.log('===================================================')
+    }
+  })
+}
 
+if (command === 'movie-this' && typeof (userQuery) === 'string') {
+  request(`http://www.omdbapi.com/?t=${userQuery}&y=&plot=short&apikey=40e9cece`, function (error, response, body) {
+    // If the request is successful (i.e. if the response status code is 200)
+    if (!error && response.statusCode === 200) {
+      console.log('===================================================')
+      console.log('Title: ' + JSON.parse(body).Title)
+      console.log('Year: ' + JSON.parse(body).Year)
+      console.log('IMDB rating: ' + JSON.parse(body).Ratings[0].Value)
+      console.log('Rotten Tomatoes rating: ' + JSON.parse(body).Ratings[1].Value)
+      console.log('Production country: ' + JSON.parse(body).Country)
+      console.log('Language: ' + JSON.parse(body).Title)
+      console.log('Plot: ' + JSON.parse(body).Plot)
+      console.log('Actors: ' + JSON.parse(body).Actors)
+      console.log('===================================================')
+    }
+  })
 }
 
 if (command === 'do-what-it-says') {
