@@ -13,38 +13,56 @@ const twitterUser = new Twitter(keys.twitterKeys)
 // Generating user information using Spotify API keys
 let spotifyUser = new Spotify(keys.spotifyKeys)
 
-// Constants for command
+// Constants for commands and inputs
 let command = process.argv[2]
 let userQuery = process.argv[3]
-const nodeCommands = function(command, userQuery) {
+
+// Function for program logic
+const nodeCommands = function (command, userQuery) {
   if (command === 'my-tweets') {
     const params = {screen_name: 'KennethLanza91'}
     twitterUser.get('statuses/user_timeline', params, function (error, tweets, response) {
       if (!error) {
-        console.log(tweets.length)
+        let tweetResponse = []
         tweets.forEach(element => {
-          // console.log('===========')
+          tweetResponse.push(element.created_at)
           console.log(element.created_at)
+          tweetResponse.push(element.text)
           console.log(element.text)
+          tweetResponse.push('===================================================')
           console.log('===================================================')
+        })
+        let tweetResponseLog = tweetResponse.join('\r\n')
+        fs.appendFile('log.txt', '\n' + command + '\n' + tweetResponseLog, (err) => {
+          if (err) throw err
         })
       }
     })
   }
 
   if (command === 'spotify-this-song' && userQuery === undefined) {
-    console.log('---------------------------------------------------')
-    console.log('Please include the song name, in quotations, after the Spotify command to use this function.')
-    console.log('Here is an example response:')
     spotifyUser
       .request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
       .then(function (data) {
-        console.log('===================================================')
-        console.log('Artist: ' + data.artists[0].name)
-        console.log('Song: ' + data.name)
-        console.log('Album: ' + data.album.name)
-        console.log('Preview: ' + data.preview_url)
-        console.log('===================================================')
+        const spotifyResponse = [
+          'Command: ' + command,
+          '---------------------------------------------------',
+          'Please include the song name, in quotations, after the Spotify command to use this function.',
+          'Here is an example response:',
+          '===================================================',
+          'Artist: ' + data.artists[0].name,
+          'Song: ' + data.name,
+          'Album: ' + data.album.name,
+          'Preview: ' + data.preview_url,
+          '==================================================='
+        ]
+        spotifyResponse.forEach(function (element) {
+          console.log(element)
+        })
+        const spotifyResponseLog = spotifyResponse.join('\r\n')
+        fs.appendFile('log.txt', '\n' + spotifyResponseLog, (err) => {
+          if (err) throw err
+        })
       })
       .catch(function (err) {
         console.error('Error occurred: ' + err)
@@ -56,12 +74,22 @@ const nodeCommands = function(command, userQuery) {
       if (err) {
         return console.log('Error occurred: ' + err)
       }
-      console.log('===================================================')
-      console.log('Artist: ' + data.tracks.items[0].artists[0].name)
-      console.log('Song: ' + data.tracks.items[0].name)
-      console.log('Preview: ' + data.tracks.items[0].preview_url)
-      console.log('Album: ' + data.tracks.items[0].album.name)
-      console.log('===================================================')
+      const spotifyResponse = [
+        'Command: ' + command,
+        '===================================================',
+        'Artist: ' + data.tracks.items[0].artists[0].name,
+        'Song: ' + data.tracks.items[0].name,
+        'Preview: ' + data.tracks.items[0].preview_url,
+        'Album: ' + data.tracks.items[0].album.name,
+        '==================================================='
+      ]
+      spotifyResponse.forEach(function (element) {
+        console.log(element)
+      })
+      const spotifyResponseLog = spotifyResponse.join('\r\n')
+      fs.appendFile('log.txt', '\n' + spotifyResponseLog, (err) => {
+        if (err) throw err
+      })
     })
   }
 
@@ -69,28 +97,11 @@ const nodeCommands = function(command, userQuery) {
     request('http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=40e9cece', function (error, response, body) {
       // If the request is successful (i.e. if the response status code is 200)
       if (!error && response.statusCode === 200) {
-        console.log('---------------------------------------------------')
-        console.log('Please include the movie title, in quotations, after the Spotify command to use this function.')
-        console.log('Here is an example response:')
-        console.log('===================================================')
-        console.log('Title: ' + JSON.parse(body).Title)
-        console.log('Year: ' + JSON.parse(body).Year)
-        console.log('IMDB rating: ' + JSON.parse(body).Ratings[0].Value)
-        console.log('Rotten Tomatoes rating: ' + JSON.parse(body).Ratings[1].Value)
-        console.log('Production country: ' + JSON.parse(body).Country)
-        console.log('Language: ' + JSON.parse(body).Title)
-        console.log('Plot: ' + JSON.parse(body).Plot)
-        console.log('Actors: ' + JSON.parse(body).Actors)
-        console.log('===================================================')
-      }
-    })
-  }
-
-  if (command === 'movie-this' && typeof (userQuery) === 'string') {
-    request(`http://www.omdbapi.com/?t=${userQuery}&y=&plot=short&apikey=40e9cece`, function (error, response, body) {
-      // If the request is successful (i.e. if the response status code is 200)
-      if (!error && response.statusCode === 200) {
         const movieResponse = [
+          'Command: ' + command,
+          '---------------------------------------------------',
+          'Please include the movie title, in quotations, after the Spotify command to use this function.',
+          'Here is an example response:',
           '===================================================',
           'Title: ' + JSON.parse(body).Title,
           'Year: ' + JSON.parse(body).Year,
@@ -108,7 +119,34 @@ const nodeCommands = function(command, userQuery) {
         const movieResponseLog = movieResponse.join('\r\n')
         fs.appendFile('log.txt', '\n' + movieResponseLog, (err) => {
           if (err) throw err
-          console.log('The "data to append" was appended to file!')
+        })
+      }
+    })
+  }
+
+  if (command === 'movie-this' && typeof (userQuery) === 'string') {
+    request(`http://www.omdbapi.com/?t=${userQuery}&y=&plot=short&apikey=40e9cece`, function (error, response, body) {
+      // If the request is successful (i.e. if the response status code is 200)
+      if (!error && response.statusCode === 200) {
+        const movieResponse = [
+          'Command: ' + command,
+          '===================================================',
+          'Title: ' + JSON.parse(body).Title,
+          'Year: ' + JSON.parse(body).Year,
+          'IMDB rating: ' + JSON.parse(body).Ratings[0].Value,
+          'Rotten Tomatoes rating: ' + JSON.parse(body).Ratings[1].Value,
+          'Production country: ' + JSON.parse(body).Country,
+          'Language: ' + JSON.parse(body).Title,
+          'Plot: ' + JSON.parse(body).Plot,
+          'Actors: ' + JSON.parse(body).Actors,
+          '==================================================='
+        ]
+        movieResponse.forEach(function (element) {
+          console.log(element)
+        })
+        const movieResponseLog = movieResponse.join('\r\n')
+        fs.appendFile('log.txt', '\n' + movieResponseLog, (err) => {
+          if (err) throw err
         })
       }
     })
